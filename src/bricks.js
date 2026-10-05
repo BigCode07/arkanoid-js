@@ -15,6 +15,7 @@ export function createBricks() {
         points: BRICKS.rowPoints[row],
         color: BRICKS.rowColors[row],
         alive: true,
+        row,
       });
     }
   }

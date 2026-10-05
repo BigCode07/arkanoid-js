@@ -21,7 +21,7 @@ export function bouncePaddle(ball, paddle) {
 }
 
 // Destruye como máximo un ladrillo por llamada (evita doble rebote).
-// Invierte el eje de menor penetración y devuelve los puntos ganados (0 si no hubo golpe).
+// Invierte el eje de menor penetración y devuelve el ladrillo destruido (null si no hubo golpe).
 export function bounceBricks(ball, bricks) {
   for (const brick of bricks) {
     if (!brick.alive) continue;
@@ -52,9 +52,9 @@ export function bounceBricks(ball, bricks) {
     }
 
     brick.alive = false;
-    return brick.points;
+    return brick;
   }
-  return 0;
+  return null;
 }
 
 export function bounceWalls(ball) {

@@ -19,6 +19,7 @@ Después abrir `http://localhost:8000`.
 | Mover la paleta | `←` `→`, `A` `D` o el mouse dentro del canvas |
 | Empezar, lanzar la bola, reiniciar | `Espacio` (lanzar también con click) |
 | Pausar / reanudar | `P` o `Esc` |
+| Silenciar / activar sonido | `M` |
 
 ## Reglas
 
@@ -27,4 +28,6 @@ Después abrir `http://localhost:8000`.
 - Destruir todos los ladrillos gana la partida.
 - El récord se guarda en `localStorage` (clave `arkanoid:v1:highScore`).
 
-El diseño está en `specs/01-mvp-arkanoid.md`.
+- Cada ladrillo destruido suena (sintetizado con Web Audio): más agudo cuanto más arriba está la fila. El sonido se activa con el primer `Espacio` o click.
+
+El diseño está en `specs/01-mvp-arkanoid.md` y `specs/02-brick-break-sound.md`.
