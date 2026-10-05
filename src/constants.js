@@ -17,5 +17,19 @@ export const AUDIO = {
   volume: 0.15, // ganancia 0..1
   wave: "triangle",
 };
+export const EXPLOSION = {
+  duration: 0.5, // segundos, vida máxima de fragmentos, onda y texto
+  flashDuration: 0.12, // segundos
+  particles: 14, // por ladrillo
+  particleSpeed: [90, 260], // px/s, mínimo y máximo
+  particleSize: [3, 7], // px, lado mínimo y máximo
+  gravity: 420, // px/s²
+  ringRadius: 48, // px, radio final de la onda
+  ringGlow: 14, // px, shadowBlur
+  textRise: 28, // px que sube el texto
+  shakeDuration: 0.12, // segundos
+  shakeMagnitude: 3, // px máximos de desplazamiento
+  maxParticles: 300, // tope global de seguridad
+};
 export const LIVES = 3;
 export const STORAGE_KEY = "arkanoid:v1:highScore";

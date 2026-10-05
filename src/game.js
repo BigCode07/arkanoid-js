@@ -1,6 +1,7 @@
 import { BALL, CANVAS, LIVES, PADDLE } from "./constants.js";
 import { createAudio } from "./audio.js";
 import { createBricks } from "./bricks.js";
+import { createEffects, spawnExplosion, updateEffects } from "./effects.js";
 import { createInput } from "./input.js";
 import { bounceBricks, bouncePaddle, bounceWalls } from "./physics.js";
 import { render } from "./render.js";
@@ -28,6 +29,7 @@ export function createState(highScore = 0) {
       radius: BALL.radius,
     },
     bricks: createBricks(),
+    effects: createEffects(),
   };
 }
 
@@ -35,12 +37,13 @@ export function startGame(ctx) {
   const state = createState(loadHighScore());
   const input = createInput(ctx.canvas);
   const audio = createAudio();
+  const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
   let last = performance.now();
 
   function frame(now) {
     const dt = Math.min((now - last) / 1000, MAX_DT);
     last = now;
-    update(state, input, audio, dt);
+    update(state, input, audio, reducedMotion, dt);
     render(ctx, state);
     requestAnimationFrame(frame);
   }
@@ -48,7 +51,7 @@ export function startGame(ctx) {
   requestAnimationFrame(frame);
 }
 
-function update(state, input, audio, dt) {
+function update(state, input, audio, reducedMotion, dt) {
   const { launch, confirm, pause, mute } = input;
   input.launch = false;
   input.confirm = false;
@@ -73,7 +76,7 @@ function update(state, input, audio, dt) {
         break;
       }
       movePaddle(state.paddle, input, dt);
-      moveBall(state, audio, dt);
+      moveBall(state, audio, reducedMotion, dt);
       break;
     case "paused":
       if (pause) state.status = "playing";
@@ -83,6 +86,8 @@ function update(state, input, audio, dt) {
       if (confirm) Object.assign(state, createState(state.highScore), { status: "ready" });
       break;
   }
+
+  if (state.status !== "start" && state.status !== "paused") updateEffects(state.effects, dt);
 }
 
 function stickBallToPaddle({ ball, paddle }) {
@@ -96,7 +101,7 @@ function launchBall(state) {
   state.status = "playing";
 }
 
-function moveBall(state, audio, dt) {
+function moveBall(state, audio, reducedMotion, dt) {
   const { ball } = state;
   ball.x += ball.vx * dt;
   ball.y += ball.vy * dt;
@@ -106,6 +111,7 @@ function moveBall(state, audio, dt) {
   if (brick) {
     state.score += brick.points;
     audio.playBrick(brick.row);
+    spawnExplosion(state.effects, brick, reducedMotion);
   }
 
   if (state.bricks.every((brick) => !brick.alive)) {

@@ -29,5 +29,6 @@ Después abrir `http://localhost:8000`.
 - El récord se guarda en `localStorage` (clave `arkanoid:v1:highScore`).
 
 - Cada ladrillo destruido suena (sintetizado con Web Audio): más agudo cuanto más arriba está la fila. El sonido se activa con el primer `Espacio` o click.
+- Cada ladrillo destruido explota (canvas 2D): destello, fragmentos, onda expansiva con brillo, texto de puntos y sacudida leve. Con `prefers-reduced-motion` solo se muestra el destello.
 
-El diseño está en `specs/01-mvp-arkanoid.md` y `specs/02-brick-break-sound.md`.
+El diseño está en `specs/01-mvp-arkanoid.md`, `specs/02-brick-break-sound.md` y `specs/03-brick-explosion.md`.
