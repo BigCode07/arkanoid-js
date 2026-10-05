@@ -1,0 +1,25 @@
+# Claude Code / spec-driven
+.agents/
+.claude/
+skills-lock.json
+
+# macOS
+.DS_Store
+
+# Entorno y secretos
+.env
+.env.*
+
+# Logs
+*.log
+logs/
+
+# Dependencias y build (por si se agregan)
+node_modules/
+dist/
+build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
