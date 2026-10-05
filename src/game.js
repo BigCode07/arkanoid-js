@@ -1,4 +1,5 @@
 import { BALL, CANVAS, LIVES, PADDLE } from "./constants.js";
+import { createAudio } from "./audio.js";
 import { createBricks } from "./bricks.js";
 import { createInput } from "./input.js";
 import { bounceBricks, bouncePaddle, bounceWalls } from "./physics.js";
@@ -33,12 +34,13 @@ export function createState(highScore = 0) {
 export function startGame(ctx) {
   const state = createState(loadHighScore());
   const input = createInput(ctx.canvas);
+  const audio = createAudio();
   let last = performance.now();
 
   function frame(now) {
     const dt = Math.min((now - last) / 1000, MAX_DT);
     last = now;
-    update(state, input, dt);
+    update(state, input, audio, dt);
     render(ctx, state);
     requestAnimationFrame(frame);
   }
@@ -46,11 +48,15 @@ export function startGame(ctx) {
   requestAnimationFrame(frame);
 }
 
-function update(state, input, dt) {
-  const { launch, confirm, pause } = input;
+function update(state, input, audio, dt) {
+  const { launch, confirm, pause, mute } = input;
   input.launch = false;
   input.confirm = false;
   input.pause = false;
+  input.mute = false;
+
+  if (launch || confirm) audio.unlock();
+  if (mute) audio.toggleMute();
 
   switch (state.status) {
     case "start":
@@ -67,7 +73,7 @@ function update(state, input, dt) {
         break;
       }
       movePaddle(state.paddle, input, dt);
-      moveBall(state, dt);
+      moveBall(state, audio, dt);
       break;
     case "paused":
       if (pause) state.status = "playing";
@@ -90,13 +96,17 @@ function launchBall(state) {
   state.status = "playing";
 }
 
-function moveBall(state, dt) {
+function moveBall(state, audio, dt) {
   const { ball } = state;
   ball.x += ball.vx * dt;
   ball.y += ball.vy * dt;
   bounceWalls(ball);
   bouncePaddle(ball, state.paddle);
-  state.score += bounceBricks(ball, state.bricks);
+  const brick = bounceBricks(ball, state.bricks);
+  if (brick) {
+    state.score += brick.points;
+    audio.playBrick(brick.row);
+  }
 
   if (state.bricks.every((brick) => !brick.alive)) {
     finishGame(state, "won");

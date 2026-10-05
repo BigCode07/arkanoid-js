@@ -4,8 +4,8 @@ const LEFT_KEYS = ["ArrowLeft", "KeyA"];
 const RIGHT_KEYS = ["ArrowRight", "KeyD"];
 const PAUSE_KEYS = ["KeyP", "Escape"];
 
-// `launch` (Espacio o click), `confirm` (solo Espacio) y `pause` son acciones de un
-// solo disparo: el juego las consume y las limpia en cada frame.
+// `launch` (Espacio o click), `confirm` (solo Espacio), `pause` y `mute` son acciones
+// de un solo disparo: el juego las consume y las limpia en cada frame.
 export function createInput(canvas) {
   const input = {
     left: false,
@@ -14,6 +14,7 @@ export function createInput(canvas) {
     launch: false,
     confirm: false,
     pause: false,
+    mute: false,
   };
 
   window.addEventListener("keydown", (e) => {
@@ -25,6 +26,7 @@ export function createInput(canvas) {
       }
     }
     if (PAUSE_KEYS.includes(e.code) && !e.repeat) input.pause = true;
+    if (e.code === "KeyM" && !e.repeat) input.mute = true;
     if (LEFT_KEYS.includes(e.code)) input.left = true;
     if (RIGHT_KEYS.includes(e.code)) input.right = true;
   });
