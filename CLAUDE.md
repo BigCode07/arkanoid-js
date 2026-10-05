@@ -12,7 +12,7 @@ Para correrlo hay que servir la raíz por HTTP (los módulos ES no cargan desde 
 python3 -m http.server 8000   # abrir http://localhost:8000
 ```
 
-Controles: `←` `→` / `A` `D` / mouse mueven la paleta; `Espacio` empieza, lanza y reinicia (lanzar también con click); `P` o `Esc` pausan; `M` silencia/activa el sonido (ver `specs/02-brick-break-sound.md`).
+Controles: `←` `→` / `A` `D` / mouse mueven la paleta; `Espacio` empieza, lanza y reinicia (lanzar también con click); `P` o `Esc` pausan; `M` silencia/activa el sonido (ver `specs/02-brick-break-sound.md`). Cada ladrillo destruido dispara una explosión animada (ver `specs/03-brick-explosion.md`).
 
 No existen comandos de build, lint ni test; no asumirlos. Si se agrega alguno, documentarlo aquí (incluido cómo correr un solo test).
 
